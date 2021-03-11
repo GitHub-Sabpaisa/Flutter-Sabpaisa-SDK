@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
+import 'package:encrypt/encrypt.dart' as en;
 
 
 //Testing Credentionals
@@ -92,7 +93,7 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
     var data = postData;
 
     var urlQueryString = "clientName=" + data._clientName
-        +"&usern="+data._usern
+        +"&prodCode=&usern="+data._usern
         +"&pass="+data._pass
         +"&amt="+data._amt
         +"&txnId="+data._txnId
@@ -109,17 +110,20 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
         queryString += key.toString() +value.toString();
       }
     });
-urlQueryString="query="+urlQueryString+"&clientName="+data._clientName;
 
-    var utf8Key = utf8.encode(Auth.AUTH_KEY);
-    var hmacSha256 = new Hmac(sha256, utf8Key);
-    var bytes = utf8.encode(queryString);
-    Digest sha256Result = hmacSha256.convert(bytes);
 
-    var base64EncodeValue = base64Encode(sha256Result.bytes);
-    base64EncodeValue = base64EncodeValue.replaceAll(new RegExp(r"\s\b|\b\s"), "").replaceAll("\\+", "%2B");
+    // var utf8Key = utf8.encode(Auth.AUTH_KEY);
+    // var hmacSha256 = new Hmac(sha256, utf8Key);
+    // var bytes = utf8.encode(queryString);
+    // Digest sha256Result = hmacSha256.convert(bytes);
 
-    queryString = urlQueryString + "&checkSum=" + base64EncodeValue;
+    // var base64EncodeValue = base64Encode(sha256Result.bytes);
+    // base64EncodeValue = base64EncodeValue.replaceAll(new RegExp(r"\s\b|\b\s"), "").replaceAll("//+", "%2B").replaceAll("+","%2B");
+    var key = en.Key.fromUtf8(Auth.AUTH_KEY);
+    var iv = en.IV.fromUtf8(Auth.AUTH_IV);
+    final encrypter = en.Encrypter(en.AES(key));
+     final base64EncodeValue = encrypter.encrypt(queryString, iv: iv).base64;
+    queryString = urlQueryString + "&checkSum=" + base64EncodeValue.replaceAll("+", "%2B").replaceAll(new RegExp(r"\s\b|\b\s"), "");
     var url = Constants.PAYMENT_URL +"?"+ queryString;
 
     setState(() {
@@ -135,6 +139,7 @@ urlQueryString="query="+urlQueryString+"&clientName="+data._clientName;
         child: FutureBuilder<Recharge>(
           builder: (context, snapshot) {
             if ('$_webViewURL' != null &&  !_loader) {
+              print(_webViewURL);
               return WebView(
                 initialUrl: '$_webViewURL',
                 javascriptMode: JavascriptMode.unrestricted,
