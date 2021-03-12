@@ -105,24 +105,24 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
         +"&ru="+data._ru
         +"&failureURL="+data._failureURL;
 
-    myMap.forEach((key, value) {
-      if(key != 'amt' && key != 'clientName'){
-        queryString += key.toString() +value.toString();
-      }
-    });
+    // myMap.forEach((key, value) {
+    //   if(key != 'amt' && key != 'clientName'){
+    //     queryString += key.toString() +value.toString();
+    //   }
+    // });
 
+queryString="Add"+data._Add+"Email"+data._Email+"amountTypechannelIdcontactNo"+data._contactNo+"failureURL"+data._failureURL+"firstName"+data._firstName+"grNumberlstName"+data._lstName+"midNameparam1param2param3param4pass"+data._pass+"programIdru"+data._ru+"semstudentUintxnId"+data._txnId+"udf10udf11udf12udf13udf14udf15udf16udf17udf18udf19udf20udf5udf6udf7udf8udf9usern"+data._usern;
+    var utf8Key = utf8.encode(Auth.AUTH_KEY);
+    var hmacSha256 = new Hmac(sha256, utf8Key);
+    var bytes = utf8.encode(queryString);
+    Digest sha256Result = hmacSha256.convert(bytes);
 
-    // var utf8Key = utf8.encode(Auth.AUTH_KEY);
-    // var hmacSha256 = new Hmac(sha256, utf8Key);
-    // var bytes = utf8.encode(queryString);
-    // Digest sha256Result = hmacSha256.convert(bytes);
-
-    // var base64EncodeValue = base64Encode(sha256Result.bytes);
-    // base64EncodeValue = base64EncodeValue.replaceAll(new RegExp(r"\s\b|\b\s"), "").replaceAll("//+", "%2B").replaceAll("+","%2B");
-    var key = en.Key.fromUtf8(Auth.AUTH_KEY);
-    var iv = en.IV.fromUtf8(Auth.AUTH_IV);
-    final encrypter = en.Encrypter(en.AES(key));
-     final base64EncodeValue = encrypter.encrypt(queryString, iv: iv).base64;
+    var base64EncodeValue = base64Encode(sha256Result.bytes);
+  print(base64EncodeValue);
+    // var key = en.Key.fromUtf8(Auth.AUTH_KEY);
+    // var iv = en.IV.fromUtf8(Auth.AUTH_IV);
+    // final encrypter = en.Encrypter(en.AES(key));
+    //  final base64EncodeValue = encrypter.encrypt(queryString, iv: iv).base64;
     queryString = urlQueryString + "&checkSum=" + base64EncodeValue.replaceAll("+", "%2B").replaceAll(new RegExp(r"\s\b|\b\s"), "");
     var url = Constants.PAYMENT_URL +"?"+ queryString;
 
