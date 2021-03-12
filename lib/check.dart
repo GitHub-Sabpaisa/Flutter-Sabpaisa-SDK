@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -8,7 +7,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as en;
-
 
 //Testing Credentionals
 // Client Code = ABN01
@@ -24,18 +22,21 @@ import 'package:encrypt/encrypt.dart' as en;
 // Authentication KEY = Uf8lXNCJCaZxLsIJ
 // Authentication IV = NhaJtiHpHGT5t28Q
 
-
 class Auth {
   static const AUTH_KEY = "wRAKcWb8WjGSU8Z2";
   static const AUTH_IV = "9oaIkb7SCYunVDYg";
 }
 
 class Constants {
-  static const TESTING_PAYMENT = "https://uatsp.sabpaisa.in/SabPaisa/sabPaisaInit"; //use
-  static const LIVE_PAYMENT = "https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit"; //use
+  static const TESTING_PAYMENT =
+      "https://uatsp.sabpaisa.in/SabPaisa/sabPaisaInit"; //use
+  static const LIVE_PAYMENT =
+      "https://securepay.sabpaisa.in/SabPaisa/sabPaisaInit"; //use
   static const RETURN_BASE_URL = "http://opencart-local.com/"; //use
-  static const PAYMENT_SUCCESS_URL = RETURN_BASE_URL+"index.php?route=extension/payment/sabpaisa/notify/";
-  static const PAYMENT_FAILURE_URL = RETURN_BASE_URL+"index.php?route=extension/payment/sabpaisa/notify/";
+  static const PAYMENT_SUCCESS_URL =
+      RETURN_BASE_URL + "index.php?route=extension/payment/sabpaisa/notify/";
+  static const PAYMENT_FAILURE_URL =
+      RETURN_BASE_URL + "index.php?route=extension/payment/sabpaisa/notify/";
   static const PAYMENT_URL = TESTING_PAYMENT;
 }
 
@@ -43,12 +44,13 @@ class PaymentProcess extends StatelessWidget {
   // Declare a field that holds the RechargeValues data
   final RechargeValues rechargevalues;
 
-  const PaymentProcess({Key key,@required this.rechargevalues}) : super(key: key);
+  const PaymentProcess({Key key, @required this.rechargevalues})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: PaymentGetwayPage(rechargevalues: rechargevalues),
+        child: PaymentGetwayPage(rechargevalues: rechargevalues),
       ),
     );
   }
@@ -59,8 +61,10 @@ class PaymentGetwayPage extends StatefulWidget {
 
   const PaymentGetwayPage({Key key, this.rechargevalues}) : super(key: key);
   @override
-  _PaymentGetwayPageState createState() => _PaymentGetwayPageState(rechargevalues: rechargevalues);
+  _PaymentGetwayPageState createState() =>
+      _PaymentGetwayPageState(rechargevalues: rechargevalues);
 }
+
 enum MenuOptions {
   showUserAgent,
   listCookies,
@@ -77,7 +81,8 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
   final RechargeValues rechargevalues;
   _PaymentGetwayPageState({this.rechargevalues});
   Future<Recharge> futureAlbum;
-  final Completer<WebViewController> _controller = Completer<WebViewController>();
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   @override
   void initState() {
@@ -85,25 +90,41 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     getUrlString(rechargevalues);
   }
+
   // set checksum value and create payment URL
-  void getUrlString(postData){
+  void getUrlString(postData) {
     String queryString = "";
     var _list = jsonEncode(postData);
     Map<String, dynamic> myMap = json.decode(_list);
     var data = postData;
 
-    var urlQueryString = "clientName=" + data._clientName
-        +"&prodCode=&usern="+data._usern
-        +"&pass="+data._pass
-        +"&amt="+data._amt
-        +"&txnId="+data._txnId
-        +"&firstName="+data._firstName
-        +"&lstName="+data._lstName
-        +"&contactNo="+data._contactNo
-        +"&Email="+data._Email
-        +"&Add="+data._Add
-        +"&ru="+data._ru
-        +"&failureURL="+data._failureURL;
+    var urlQueryString = "clientName=" +
+        data._clientName +
+        "&prodCode=&usern=" +
+        data._usern +
+        "&pass=" +
+        data._pass +
+        "&amt=" +
+        data._amt +
+        "&txnId=" +
+        data._txnId +
+        "&firstName=" +
+        data._firstName +
+        "&lstName=" +
+        data._lstName +
+        "&contactNo=" +
+        data._contactNo +
+        "&Email=" +
+        data._Email +
+        "&Add=" +
+        data._Add +
+        "&ru=" +
+        data._ru +
+        "&failureURL=" +
+        data._failureURL +
+        "&udf10=" +
+        data._udf10
+        ;
 
     // myMap.forEach((key, value) {
     //   if(key != 'amt' && key != 'clientName'){
@@ -111,20 +132,43 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
     //   }
     // });
 
-queryString="Add"+data._Add+"Email"+data._Email+"amountTypechannelIdcontactNo"+data._contactNo+"failureURL"+data._failureURL+"firstName"+data._firstName+"grNumberlstName"+data._lstName+"midNameparam1param2param3param4pass"+data._pass+"programIdru"+data._ru+"semstudentUintxnId"+data._txnId+"udf10udf11udf12udf13udf14udf15udf16udf17udf18udf19udf20udf5udf6udf7udf8udf9usern"+data._usern;
+    queryString = "Add" +
+        data._Add +
+        "Email" +
+        data._Email +
+        "amountTypechannelIdcontactNo" +
+        data._contactNo +
+        "failureURL" +
+        data._failureURL +
+        "firstName" +
+        data._firstName +
+        "grNumberlstName" +
+        data._lstName +
+        "midNameparam1param2param3param4pass" +
+        data._pass +
+        "programIdru" +
+        data._ru +
+        "semstudentUintxnId" +
+        data._txnId +
+        "udf10"+data._udf10+"udf11udf12udf13udf14udf15udf16udf17udf18udf19udf20udf5udf6udf7udf8udf9usern" +
+        data._usern;
     var utf8Key = utf8.encode(Auth.AUTH_KEY);
     var hmacSha256 = new Hmac(sha256, utf8Key);
     var bytes = utf8.encode(queryString);
     Digest sha256Result = hmacSha256.convert(bytes);
 
     var base64EncodeValue = base64Encode(sha256Result.bytes);
-  print(base64EncodeValue);
+    print(base64EncodeValue);
     // var key = en.Key.fromUtf8(Auth.AUTH_KEY);
     // var iv = en.IV.fromUtf8(Auth.AUTH_IV);
     // final encrypter = en.Encrypter(en.AES(key));
     //  final base64EncodeValue = encrypter.encrypt(queryString, iv: iv).base64;
-    queryString = urlQueryString + "&checkSum=" + base64EncodeValue.replaceAll("+", "%2B").replaceAll(new RegExp(r"\s\b|\b\s"), "");
-    var url = Constants.PAYMENT_URL +"?"+ queryString;
+    queryString = urlQueryString +
+        "&checkSum=" +
+        base64EncodeValue
+            .replaceAll("+", "%2B")
+            .replaceAll(new RegExp(r"\s\b|\b\s"), "");
+    var url = Constants.PAYMENT_URL + "?" + queryString;
 
     setState(() {
       _webViewURL = url;
@@ -138,13 +182,13 @@ queryString="Add"+data._Add+"Email"+data._Email+"amountTypechannelIdcontactNo"+d
       body: Center(
         child: FutureBuilder<Recharge>(
           builder: (context, snapshot) {
-            if ('$_webViewURL' != null &&  !_loader) {
+            if ('$_webViewURL' != null && !_loader) {
               print(_webViewURL);
               return WebView(
                 initialUrl: '$_webViewURL',
                 javascriptMode: JavascriptMode.unrestricted,
                 onWebViewCreated: (WebViewController webViewController) async {
-                 _controller.complete(webViewController);
+                  _controller.complete(webViewController);
                 },
                 navigationDelegate: (NavigationRequest request) {
                   return NavigationDecision.navigate;
@@ -163,33 +207,43 @@ queryString="Add"+data._Add+"Email"+data._Email+"amountTypechannelIdcontactNo"+d
                       _webViewURL = "";
                     });
                     urlData.forEach((key, value) {
-                      if(key == 'SabPaisaTxId'){
+                      if (key == 'SabPaisaTxId') {
                         SabPaisaTxId = value;
                       }
-                      if(key == 'amount'){
+                      if (key == 'amount') {
                         amount = value;
                       }
-                      if(key == 'clientTxnId'){
+                      if (key == 'clientTxnId') {
                         clientTxnId = value;
                       }
-                      if(key == 'payMode'){
+                      if (key == 'payMode') {
                         payMode = value;
                       }
-                      if(key == 'transDate'){
+                      if (key == 'transDate') {
                         transDate = value;
                       }
-                      if(key == 'reMsg'){
+                      if (key == 'reMsg') {
                         reMsg = value;
                       }
-                      if(key == 'spRespStatus' && value == 'SUCCESS'){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentSuccessPage(processcomplete: new ProcessComplete(SabPaisaTxId: SabPaisaTxId,
-                            amount: amount,
-                            clientTxnId: clientTxnId,
-                            payMode: payMode,
-                            transDate: transDate,
-                            reMsg: reMsg))));
-                      }else if(key == 'spRespStatus' && value == 'FAILED'){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentFailurePage(processcomplete: new ProcessComplete(reMsg: reMsg))));
+                      if (key == 'spRespStatus' && value == 'SUCCESS') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PaymentSuccessPage(
+                                    processcomplete: new ProcessComplete(
+                                        SabPaisaTxId: SabPaisaTxId,
+                                        amount: amount,
+                                        clientTxnId: clientTxnId,
+                                        payMode: payMode,
+                                        transDate: transDate,
+                                        reMsg: reMsg))));
+                      } else if (key == 'spRespStatus' && value == 'FAILED') {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PaymentFailurePage(
+                                    processcomplete:
+                                        new ProcessComplete(reMsg: reMsg))));
                       }
                     });
                   }
@@ -211,7 +265,8 @@ class PaymentSuccessPage extends StatefulWidget {
 
   const PaymentSuccessPage({Key key, this.processcomplete}) : super(key: key);
   @override
-  _PaymentSuccessPageState createState() => _PaymentSuccessPageState(processcomplete: processcomplete);
+  _PaymentSuccessPageState createState() =>
+      _PaymentSuccessPageState(processcomplete: processcomplete);
 }
 
 class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
@@ -222,32 +277,54 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
     // TODO: implement build
     return Scaffold(
       body: Center(
-        child:Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           textDirection: TextDirection.ltr,
           children: <Widget>[
-            Text(processcomplete.reMsg.replaceAll("%20", ' '), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),),
+            Text(
+              processcomplete.reMsg.replaceAll("%20", ' '),
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+            ),
             SizedBox(
               height: 15.0,
             ),
-            Text('SabPaisaTxId: '+processcomplete.SabPaisaTxId.replaceAll("%20", ' '),textAlign: TextAlign.left,),
+            Text(
+              'SabPaisaTxId: ' +
+                  processcomplete.SabPaisaTxId.replaceAll("%20", ' '),
+              textAlign: TextAlign.left,
+            ),
             SizedBox(
               height: 15.0,
             ),
-            Text('ClientTxnId: '+processcomplete.clientTxnId.replaceAll("%20", ' '),textAlign: TextAlign.left,),
+            Text(
+              'ClientTxnId: ' +
+                  processcomplete.clientTxnId.replaceAll("%20", ' '),
+              textAlign: TextAlign.left,
+            ),
             SizedBox(
               height: 15.0,
             ),
-            Text('Payment Mode: '+processcomplete.payMode.replaceAll("%20", ' '),textAlign: TextAlign.left,),
+            Text(
+              'Payment Mode: ' + processcomplete.payMode.replaceAll("%20", ' '),
+              textAlign: TextAlign.left,
+            ),
             SizedBox(
               height: 15.0,
             ),
-            Text('Amount: '+processcomplete.amount.replaceAll("%20", ' '),textAlign: TextAlign.left,),
+            Text(
+              'Amount: ' + processcomplete.amount.replaceAll("%20", ' '),
+              textAlign: TextAlign.left,
+            ),
             SizedBox(
               height: 15.0,
             ),
-            Text('Transaction Date: '+processcomplete.transDate.replaceAll("%20", ' '),textAlign: TextAlign.left,),
+            Text(
+              'Transaction Date: ' +
+                  processcomplete.transDate.replaceAll("%20", ' '),
+              textAlign: TextAlign.left,
+            ),
             SizedBox(
               height: 15.0,
             ),
@@ -266,7 +343,6 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
       ),
     );
   }
-
 }
 
 class PaymentFailurePage extends StatefulWidget {
@@ -274,7 +350,8 @@ class PaymentFailurePage extends StatefulWidget {
 
   const PaymentFailurePage({Key key, this.processcomplete}) : super(key: key);
   @override
-  _PaymentFailurePageState createState() => _PaymentFailurePageState(processcomplete: processcomplete);
+  _PaymentFailurePageState createState() =>
+      _PaymentFailurePageState(processcomplete: processcomplete);
 }
 
 class _PaymentFailurePageState extends State<PaymentFailurePage> {
@@ -285,12 +362,16 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
     // TODO: implement build
     return Scaffold(
       body: Center(
-        child:Column(
+        child: Column(
           textDirection: TextDirection.ltr,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(processcomplete.reMsg.replaceAll("%20", ' '),style: TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent),),
+            Text(
+              processcomplete.reMsg.replaceAll("%20", ' '),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.redAccent),
+            ),
             SizedBox(
               height: 15.0,
             ),
@@ -309,11 +390,9 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
       ),
     );
   }
-
 }
 
 class RechargeValues {
-
   // usern
   String _Add;
   String _Email;
@@ -354,48 +433,48 @@ class RechargeValues {
   String _usern;
   String _clientName;
   String _amt;
-  
 
-  RechargeValues({@required String Add = "",
-    String Email = "",
-    String amountType = "",
-    String channelId = "",
-    String contactNo = "",
-    String failureURL = Constants.PAYMENT_FAILURE_URL,
-    String firstName = "",
-    String grNumber = "",
-    String lstName = "",
-    String midName = "",
-    String param1 = "",
-    String param2 = "",
-    String param3 = "",
-    String param4 = "",
-    String pass = "",
-    String programId = "",
-    String ru = Constants.PAYMENT_SUCCESS_URL,
-    String sem = "",
-    String studentUin = "",
-    String txnId = "",
-    String udf10 = "",
-    String udf11 = "",
-    String udf12 = "",
-    String udf13 = "",
-    String udf14 = "",
-    String udf15 = "",
-    String udf16 = "",
-    String udf17 = "",
-    String udf18 = "",
-    String udf19 = "",
-    String udf20 = "",
-    String udf5 = "",
-    String udf6 = "",
-    String udf7 = "",
-    String udf8 = "",
-    String udf9 = "",
-    String usern = "",
-    String clientName,
-    String amt = ""}) :
-        _Add = Add,
+  RechargeValues(
+      {@required String Add = "",
+      String Email = "",
+      String amountType = "",
+      String channelId = "",
+      String contactNo = "",
+      String failureURL = Constants.PAYMENT_FAILURE_URL,
+      String firstName = "",
+      String grNumber = "",
+      String lstName = "",
+      String midName = "",
+      String param1 = "",
+      String param2 = "",
+      String param3 = "",
+      String param4 = "",
+      String pass = "",
+      String programId = "",
+      String ru = Constants.PAYMENT_SUCCESS_URL,
+      String sem = "",
+      String studentUin = "",
+      String txnId = "",
+      String udf10 = "",
+      String udf11 = "",
+      String udf12 = "",
+      String udf13 = "",
+      String udf14 = "",
+      String udf15 = "",
+      String udf16 = "",
+      String udf17 = "",
+      String udf18 = "",
+      String udf19 = "",
+      String udf20 = "",
+      String udf5 = "",
+      String udf6 = "",
+      String udf7 = "",
+      String udf8 = "",
+      String udf9 = "",
+      String usern = "",
+      String clientName,
+      String amt = ""})
+      : _Add = Add,
         _Email = Email,
         _amountType = amountType,
         _channelId = channelId,
@@ -431,8 +510,8 @@ class RechargeValues {
         _udf7 = udf7,
         _udf8 = udf8,
         _udf9 = udf9,
-        _usern = usern,// optional parameter with default value ""
-        _clientName = clientName,// required parameter
+        _usern = usern, // optional parameter with default value ""
+        _clientName = clientName, // required parameter
         _amt = amt; // optional parameter without default value
 
   RechargeValues.fromJson(Map<String, dynamic> json)
@@ -495,7 +574,7 @@ class RechargeValues {
       'pass': _pass,
       'programId': _programId,
       'ru': _ru,
-      'sem' : _sem,
+      'sem': _sem,
       'studentUin': _studentUin,
       'txnId': _txnId,
       'udf10': _udf10,
@@ -519,11 +598,9 @@ class RechargeValues {
       'amt': _amt,
     };
   }
-
 }
 
 class ProcessComplete {
-
   // usern
   String SabPaisaTxId;
   String amount;
@@ -532,13 +609,14 @@ class ProcessComplete {
   String transDate;
   String reMsg;
 
-  ProcessComplete({@required String SabPaisaTxId = "",
-    String amount = "",
-    String clientTxnId = "",
-    String payMode = "",
-    String transDate = "",
-    String reMsg = ""}) :
-        SabPaisaTxId = SabPaisaTxId,
+  ProcessComplete(
+      {@required String SabPaisaTxId = "",
+      String amount = "",
+      String clientTxnId = "",
+      String payMode = "",
+      String transDate = "",
+      String reMsg = ""})
+      : SabPaisaTxId = SabPaisaTxId,
         amount = amount,
         clientTxnId = clientTxnId,
         payMode = payMode,
@@ -563,7 +641,6 @@ class ProcessComplete {
       'reMsg': reMsg,
     };
   }
-
 }
 
 // Model  layer for payment Process
@@ -579,11 +656,9 @@ class Recharge {
 
 // Service layer for payment Process
 class Services {
-
   Future<Recharge> getDecryptedString(rechargeentity) async {
     String body = json.encode(rechargeentity);
-    final response =
-    await http.post(
+    final response = await http.post(
       Constants.TESTING_PAYMENT,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -605,8 +680,7 @@ class Services {
   Future<Recharge> sabpaisaResponse(rechargeentity) async {
     String body = json.encode(rechargeentity);
     Random random = new Random();
-    final response =
-    await http.post(
+    final response = await http.post(
       Constants.TESTING_PAYMENT,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -624,5 +698,4 @@ class Services {
       throw Exception('Failed to load album');
     }
   }
-
 }
