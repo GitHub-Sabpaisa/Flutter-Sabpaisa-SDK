@@ -7,7 +7,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto/crypto.dart';
 
-
 //Testing Credentionals
 // Client Code = ABN01
 // Username = sdfggdsg_1210
@@ -42,9 +41,9 @@ class Constants {
 
 class PaymentProcess extends StatelessWidget {
   // Declare a field that holds the RechargeValues data
-  final RechargeValues rechargevalues;
+  final RechargeValues? rechargevalues;
 
-  const PaymentProcess({Key key, @required this.rechargevalues})
+  const PaymentProcess({Key? key, @required this.rechargevalues})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -57,12 +56,12 @@ class PaymentProcess extends StatelessWidget {
 }
 
 class PaymentGetwayPage extends StatefulWidget {
-  final RechargeValues rechargevalues;
+  final RechargeValues? rechargevalues;
 
-  const PaymentGetwayPage({Key key, this.rechargevalues}) : super(key: key);
+  const PaymentGetwayPage({Key? key, this.rechargevalues}) : super(key: key);
   @override
   _PaymentGetwayPageState createState() =>
-      _PaymentGetwayPageState(rechargevalues: rechargevalues);
+      _PaymentGetwayPageState(rechargevalues: this.rechargevalues);
 }
 
 enum MenuOptions {
@@ -78,9 +77,11 @@ enum MenuOptions {
 class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
   String _webViewURL = "";
   bool _loader = true;
-  final RechargeValues rechargevalues;
-  _PaymentGetwayPageState({this.rechargevalues});
-  Future<Recharge> futureAlbum;
+  RechargeValues? rechargevalues;
+  _PaymentGetwayPageState({RechargeValues? rechargevalues}) {
+    this.rechargevalues = rechargevalues;
+  }
+  Future<Recharge>? futureAlbum;
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
@@ -123,8 +124,7 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
         "&failureURL=" +
         data._failureURL +
         "&udf10=" +
-        data._udf10
-        ;
+        data._udf10;
 
     // myMap.forEach((key, value) {
     //   if(key != 'amt' && key != 'clientName'){
@@ -150,7 +150,9 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
         data._ru +
         "semstudentUintxnId" +
         data._txnId +
-        "udf10"+data._udf10+"udf11udf12udf13udf14udf15udf16udf17udf18udf19udf20udf5udf6udf7udf8udf9usern" +
+        "udf10" +
+        data._udf10 +
+        "udf11udf12udf13udf14udf15udf16udf17udf18udf19udf20udf5udf6udf7udf8udf9usern" +
         data._usern;
     var utf8Key = utf8.encode(Auth.AUTH_KEY);
     var hmacSha256 = new Hmac(sha256, utf8Key);
@@ -261,16 +263,16 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
 }
 
 class PaymentSuccessPage extends StatefulWidget {
-  final ProcessComplete processcomplete;
+  final ProcessComplete? processcomplete;
 
-  const PaymentSuccessPage({Key key, this.processcomplete}) : super(key: key);
+  const PaymentSuccessPage({Key? key, this.processcomplete}) : super(key: key);
   @override
   _PaymentSuccessPageState createState() =>
       _PaymentSuccessPageState(processcomplete: processcomplete);
 }
 
 class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
-  final ProcessComplete processcomplete;
+   ProcessComplete? processcomplete;
   _PaymentSuccessPageState({this.processcomplete});
   @override
   Widget build(BuildContext context) {
@@ -283,7 +285,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
           textDirection: TextDirection.ltr,
           children: <Widget>[
             Text(
-              processcomplete.reMsg.replaceAll("%20", ' '),
+              processcomplete!.reMsg.replaceAll("%20", ' '),
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
             ),
@@ -292,7 +294,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
             ),
             Text(
               'SabPaisaTxId: ' +
-                  processcomplete.SabPaisaTxId.replaceAll("%20", ' '),
+                  processcomplete!.SabPaisaTxId.replaceAll("%20", ' '),
               textAlign: TextAlign.left,
             ),
             SizedBox(
@@ -300,21 +302,21 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
             ),
             Text(
               'ClientTxnId: ' +
-                  processcomplete.clientTxnId.replaceAll("%20", ' '),
+                  processcomplete!.clientTxnId.replaceAll("%20", ' '),
               textAlign: TextAlign.left,
             ),
             SizedBox(
               height: 15.0,
             ),
             Text(
-              'Payment Mode: ' + processcomplete.payMode.replaceAll("%20", ' '),
+              'Payment Mode: ' + processcomplete!.payMode.replaceAll("%20", ' '),
               textAlign: TextAlign.left,
             ),
             SizedBox(
               height: 15.0,
             ),
             Text(
-              'Amount: ' + processcomplete.amount.replaceAll("%20", ' '),
+              'Amount: ' + processcomplete!.amount.replaceAll("%20", ' '),
               textAlign: TextAlign.left,
             ),
             SizedBox(
@@ -322,7 +324,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
             ),
             Text(
               'Transaction Date: ' +
-                  processcomplete.transDate.replaceAll("%20", ' '),
+                  processcomplete!.transDate.replaceAll("%20", ' '),
               textAlign: TextAlign.left,
             ),
             SizedBox(
@@ -346,16 +348,16 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
 }
 
 class PaymentFailurePage extends StatefulWidget {
-  final ProcessComplete processcomplete;
+  final ProcessComplete? processcomplete;
 
-  const PaymentFailurePage({Key key, this.processcomplete}) : super(key: key);
+  const PaymentFailurePage({Key? key, this.processcomplete}) : super(key: key);
   @override
   _PaymentFailurePageState createState() =>
       _PaymentFailurePageState(processcomplete: processcomplete);
 }
 
 class _PaymentFailurePageState extends State<PaymentFailurePage> {
-  final ProcessComplete processcomplete;
+  final ProcessComplete? processcomplete;
   _PaymentFailurePageState({this.processcomplete});
   @override
   Widget build(BuildContext context) {
@@ -368,7 +370,7 @@ class _PaymentFailurePageState extends State<PaymentFailurePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              processcomplete.reMsg.replaceAll("%20", ' '),
+              processcomplete!.reMsg.replaceAll("%20", ' '),
               style: TextStyle(
                   fontWeight: FontWeight.bold, color: Colors.redAccent),
             ),
@@ -431,7 +433,7 @@ class RechargeValues {
   String _udf8;
   String _udf9;
   String _usern;
-  String _clientName;
+  String? _clientName;
   String _amt;
 
   RechargeValues(
@@ -472,7 +474,7 @@ class RechargeValues {
       String udf8 = "",
       String udf9 = "",
       String usern = "",
-      String clientName,
+      String? clientName,
       String amt = ""})
       : _Add = Add,
         _Email = Email,
@@ -659,7 +661,7 @@ class Services {
   Future<Recharge> getDecryptedString(rechargeentity) async {
     String body = json.encode(rechargeentity);
     final response = await http.post(
-      Constants.TESTING_PAYMENT,
+      Uri.parse(Constants.TESTING_PAYMENT),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -681,7 +683,7 @@ class Services {
     String body = json.encode(rechargeentity);
     Random random = new Random();
     final response = await http.post(
-      Constants.TESTING_PAYMENT,
+      Uri.parse(Constants.TESTING_PAYMENT),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
