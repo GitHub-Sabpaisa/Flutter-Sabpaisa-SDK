@@ -246,7 +246,7 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
                                         transDate: transDate,
                                         reMsg: reMsg))));
                       } else if (key == 'spRespStatus' && value == 'FAILED') {
-                        Navigator.push(r
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PaymentFailurePage(
@@ -257,7 +257,7 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
                                       clientTxnId: clientTxnId,
                                       payMode: payMode,
                                       transDate: transDate,
-
+                                      
                                     ))));
                       }
                     });
