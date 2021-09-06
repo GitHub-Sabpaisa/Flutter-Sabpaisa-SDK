@@ -257,7 +257,6 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
                                       clientTxnId: clientTxnId,
                                       payMode: payMode,
                                       transDate: transDate,
-                                      
                                     ))));
                       }
                     });
@@ -274,6 +273,13 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
       isLoading
           ? Center(
               child: CircularProgressIndicator(),
+            )
+          : Stack(),
+          
+      isLoading
+          ? Center(
+              heightFactor: 35,
+              child: Text("Please Wait...."),
             )
           : Stack(),
     ]);
