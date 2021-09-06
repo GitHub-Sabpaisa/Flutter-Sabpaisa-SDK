@@ -178,15 +178,21 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
     });
   }
 
+  bool isLoading = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Stack(children: [
+      Center(
         child: FutureBuilder<Recharge>(
           builder: (context, snapshot) {
             if ('$_webViewURL' != null && !_loader) {
               print(_webViewURL);
               return WebView(
+                onPageFinished: (finish) {
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
                 initialUrl: '$_webViewURL',
                 javascriptMode: JavascriptMode.unrestricted,
                 onWebViewCreated: (WebViewController webViewController) async {
@@ -240,12 +246,19 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
                                         transDate: transDate,
                                         reMsg: reMsg))));
                       } else if (key == 'spRespStatus' && value == 'FAILED') {
-                        Navigator.push(
+                        Navigator.push(r
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PaymentFailurePage(
-                                    processcomplete:
-                                        new ProcessComplete(reMsg: reMsg))));
+                                        processcomplete: new ProcessComplete(
+                                      reMsg: reMsg,
+                                      SabPaisaTxId: SabPaisaTxId,
+                                      amount: amount,
+                                      clientTxnId: clientTxnId,
+                                      payMode: payMode,
+                                      transDate: transDate,
+
+                                    ))));
                       }
                     });
                   }
@@ -258,7 +271,12 @@ class _PaymentGetwayPageState extends State<PaymentGetwayPage> {
           },
         ),
       ),
-    );
+      isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Stack(),
+    ]);
   }
 }
 
@@ -272,7 +290,7 @@ class PaymentSuccessPage extends StatefulWidget {
 }
 
 class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
-   ProcessComplete? processcomplete;
+  ProcessComplete? processcomplete;
   _PaymentSuccessPageState({this.processcomplete});
   @override
   Widget build(BuildContext context) {
@@ -309,7 +327,8 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
               height: 15.0,
             ),
             Text(
-              'Payment Mode: ' + processcomplete!.payMode.replaceAll("%20", ' '),
+              'Payment Mode: ' +
+                  processcomplete!.payMode.replaceAll("%20", ' '),
               textAlign: TextAlign.left,
             ),
             SizedBox(
